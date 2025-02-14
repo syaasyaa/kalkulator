@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Bintang</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f0e68c;
+        }
+        .calculator {
+            width: 260px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffcc00;
+            border-radius: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .display {
+            width: 90%;
+            height: 50px;
+            text-align: right;
+            font-size: 24px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background-color: #fff;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            width: 60px;
+            height: 60px;
+            border: none;
+            background-color: #eaff00;
+            color: rgb(8, 8, 8);
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+        button:hover {
+            background-color: #ffbf00;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" class="display" disabled>
+        <div class="buttons">
+            <button class="brown" onclick="clearDisplay()">C</button>
+            <button class="brown" onclick="appendOperator('%')">%</button>
+            <button class="brown" onclick="appendMinus()">(-)</button>
+            <button class="orange" onclick="appendOperator('/')">&divide;</button>
+            <button class="gray" onclick="appendNumber(7)">7</button>
+            <button class="gray" onclick="appendNumber(8)">8</button>
+            <button class="gray" onclick="appendNumber(9)">9</button>
+            <button class="orange" onclick="appendOperator('*')">&times;</button>
+            <button class="gray" onclick="appendNumber(4)">4</button>
+            <button class="gray" onclick="appendNumber(5)">5</button>
+            <button class="gray" onclick="appendNumber(6)">6</button>
+            <button class="orange" onclick="appendOperator('-')">-</button>
+            <button class="gray" onclick="appendNumber(1)">1</button>
+            <button class="gray" onclick="appendNumber(2)">2</button>
+            <button class="gray" onclick="appendNumber(3)">3</button>
+            <button class="orange" onclick="appendOperator('+')">+</button>
+            <button class="gray" onclick="appendDot()">.</button>
+            <button class="gray double" onclick="appendNumber(0)">0</button>
+            <button class="orange" onclick="calculateResult()">=</button>
+            <button class="brown" onclick="deleteLast()">⌫</button>
+        </div>
+    </div>
+    
+    <script>
+        let display = document.getElementById("display");
+        function appendNumber(num) {
+            display.value += num;
+        }
+        function appendOperator(op) {
+            if (display.value !== "" && !isNaN(display.value.slice(-1))) {
+                display.value += op;
+            }
+        }
+
+         function deleteLast() {
+    display.value = display.value.slice(0, -1);
+}
+        
+        function appendMinus() {
+            if (display.value === "" || display.value === "c") {
+                display.value = "-";
+            } else if (display.value.slice(-1) !== "-") {
+                display.value += "-";
+            }
+        }
+        function appendDot() {
+            if (!display.value.includes(".")) {
+                display.value += ".";
+            }
+        }
+        function clearDisplay() {
+            display.value = "";
+        }
+        function calculateResult() {
+            try {
+                let expression = display.value.replace('%', '/100');
+                if (/\/0(?![\.\d])/.test(expression)) {
+                    throw new Error("Tidak bisa membagi dengan nol");
+                }
+                display.value = eval(expression);
+            } catch (e) {
+                display.value = "Error";
+                setTimeout(() => display.value = "", 1500);
+            }
+        }
+    </script>
+</body>
+</html>
